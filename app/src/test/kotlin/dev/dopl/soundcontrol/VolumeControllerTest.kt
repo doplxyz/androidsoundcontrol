@@ -1,5 +1,6 @@
 package dev.dopl.soundcontrol
 
+import android.media.AudioManager
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -82,5 +83,32 @@ class VolumeControllerTest {
         val state = controller.adjustVolume(SoundStream.MEDIA, VolumeStep.RAISE)
 
         assertEquals(5, state.current)
+    }
+
+    @Test
+    fun `getRingerMode reflects the device ringer mode`() {
+        val controller = VolumeController(
+            FakeAudioManagerAdapter(ringerModeValue = AudioManager.RINGER_MODE_VIBRATE)
+        )
+
+        assertEquals(RingerMode.VIBRATE, controller.getRingerMode())
+    }
+
+    @Test
+    fun `setRingerMode changes the ringer mode`() {
+        val controller = VolumeController(FakeAudioManagerAdapter())
+
+        val mode = controller.setRingerMode(RingerMode.SILENT)
+
+        assertEquals(RingerMode.SILENT, mode)
+    }
+
+    @Test
+    fun `setRingerMode swallows SecurityException and returns the real mode`() {
+        val controller = VolumeController(FakeAudioManagerAdapter(throwOnChange = true))
+
+        val mode = controller.setRingerMode(RingerMode.SILENT)
+
+        assertEquals(RingerMode.NORMAL, mode)
     }
 }

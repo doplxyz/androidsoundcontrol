@@ -2,9 +2,18 @@
 <resources>
     <string name="app_name">サウンドコントロール</string>
     <string name="stream_media">メディア</string>
+    <string name="stream_ring">着信音</string>
+    <string name="stream_notification">通知</string>
+    <string name="stream_alarm">アラーム</string>
+    <string name="stream_voice_call">通話</string>
     <string name="volume_value_format">%1$d / %2$d</string>
     <string name="action_volume_down">音量を下げる</string>
     <string name="action_volume_up">音量を上げる</string>
     <string name="action_volume_down_symbol" translatable="false">▼</string>
     <string name="action_volume_up_symbol" translatable="false">▲</string>
+    <string name="ringer_mode_normal">通常</string>
+    <string name="ringer_mode_vibrate">マナー</string>
+    <string name="ringer_mode_silent">サイレント</string>
+    <string name="dnd_access_required">サイレント切替には通知アクセスの許可が必要です</string>
+    <string name="dnd_access_open_settings">許可設定を開く</string>
 </resources>

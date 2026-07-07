@@ -46,4 +46,14 @@ class VolumeController(private val audioManager: AudioManagerAdapter) {
         }
         return getVolumeState(stream)
     }
+
+    fun getRingerMode(): RingerMode = RingerMode.fromValue(audioManager.ringerMode)
+
+    fun setRingerMode(mode: RingerMode): RingerMode {
+        try {
+            audioManager.setRingerMode(mode.value)
+        } catch (_: SecurityException) {
+        }
+        return getRingerMode()
+    }
 }

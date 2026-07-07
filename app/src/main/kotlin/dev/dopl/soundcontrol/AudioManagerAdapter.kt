@@ -11,4 +11,6 @@ interface AudioManagerAdapter {
     fun setStreamVolume(streamType: Int, index: Int, flags: Int)
     fun adjustStreamVolume(streamType: Int, direction: Int, flags: Int)
     val isVolumeFixed: Boolean
+    val ringerMode: Int
+    fun setRingerMode(mode: Int)
 }
