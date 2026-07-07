@@ -7,10 +7,47 @@
     android:padding="24dp">
 
     <TextView
-        android:id="@+id/placeholder_text"
+        android:id="@+id/stream_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+        android:text="@string/stream_media"
         android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+
+    <TextView
+        android:id="@+id/volume_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <Button
+            android:id="@+id/btn_volume_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_volume_down_symbol"
+            android:contentDescription="@string/action_volume_down" />
+
+        <SeekBar
+            android:id="@+id/volume_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="8dp" />
+
+        <Button
+            android:id="@+id/btn_volume_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_volume_up_symbol"
+            android:contentDescription="@string/action_volume_up" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">サウンドコントロール</string>
+    <string name="stream_media">メディア</string>
+    <string name="volume_value_format">%1$d / %2$d</string>
+    <string name="action_volume_down">音量を下げる</string>
+    <string name="action_volume_up">音量を上げる</string>
+    <string name="action_volume_down_symbol" translatable="false">▼</string>
+    <string name="action_volume_up_symbol" translatable="false">▲</string>
 </resources>
