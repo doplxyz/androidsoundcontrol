@@ -13,7 +13,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var volumeController: VolumeController
+    private lateinit var volumeWatcher: VolumeWatcher
     private var isSyncingRingerMode = false
+    private val streamsBeingDragged = mutableSetOf<SoundStream>()
 
     private val streamRows: Map<SoundStream, ViewVolumeRowBinding> by lazy {
         mapOf(
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         volumeController = VolumeController(SystemAudioManagerAdapter(audioManager))
+        volumeWatcher = VolumeWatcher(this) { refreshAll() }
 
         streamRows.forEach { (stream, row) -> bindRow(stream, row) }
 
@@ -52,9 +55,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        volumeWatcher.start()
+    }
+
     override fun onResume() {
         super.onResume()
         refreshAll()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        volumeWatcher.stop()
     }
 
     private fun bindRow(stream: SoundStream, row: ViewVolumeRowBinding) {
@@ -67,8 +80,13 @@ class MainActivity : AppCompatActivity() {
                 renderVolumeState(row, volumeController.setVolume(stream, progress + min))
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
-            override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                streamsBeingDragged += stream
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                streamsBeingDragged -= stream
+            }
         })
 
         row.btnVolumeDown.setOnClickListener {
@@ -96,6 +114,7 @@ class MainActivity : AppCompatActivity() {
 
         val ringerMode = volumeController.getRingerMode()
         streamRows.forEach { (stream, row) ->
+            if (stream in streamsBeingDragged) return@forEach
             val state = volumeController.getVolumeState(stream)
             val silencedByRingerMode =
                 (stream == SoundStream.RING || stream == SoundStream.NOTIFICATION) &&
