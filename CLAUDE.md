@@ -60,7 +60,7 @@
 - [x] M1: Gradle プロジェクト骨組み + CI(assembleDebug / test / lint)
 - [x] M2: VolumeController + メディア音量のスライダー / ⬆️⬇️ボタン
 - [x] M3: 全 5 ストリーム + リンガーモード切替 + DND 許可フロー
-- [ ] M4: VolumeWatcher(外部変更追従)+ 堅牢化(例外・音量固定端末)
+- [x] M4: VolumeWatcher(外部変更追従)+ 堅牢化(例外・音量固定端末)
 - [ ] M5: ダークテーマ・アイコン・APK サイズ確認・実機テスト
 
 ## スコープ外(勝手に実装しない)
