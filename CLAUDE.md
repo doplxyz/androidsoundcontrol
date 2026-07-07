@@ -57,7 +57,7 @@
 
 ## 実装ロードマップ(進捗はここを更新する)
 
-- [ ] M1: Gradle プロジェクト骨組み + CI(assembleDebug / test / lint)
+- [x] M1: Gradle プロジェクト骨組み + CI(assembleDebug / test / lint)
 - [ ] M2: VolumeController + メディア音量のスライダー / ⬆️⬇️ボタン
 - [ ] M3: 全 5 ストリーム + リンガーモード切替 + DND 許可フロー
 - [ ] M4: VolumeWatcher(外部変更追従)+ 堅牢化(例外・音量固定端末)
