@@ -23,4 +23,11 @@ class SystemAudioManagerAdapter(private val audioManager: AudioManager) : AudioM
 
     override val isVolumeFixed: Boolean
         get() = audioManager.isVolumeFixed
+
+    override val ringerMode: Int
+        get() = audioManager.ringerMode
+
+    override fun setRingerMode(mode: Int) {
+        audioManager.ringerMode = mode
+    }
 }

@@ -1,53 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp">
-
-    <TextView
-        android:id="@+id/stream_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stream_media"
-        android:textAppearance="?attr/textAppearanceHeadlineSmall" />
-
-    <TextView
-        android:id="@+id/volume_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textAppearance="?attr/textAppearanceBodyLarge" />
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:padding="24dp">
 
-        <Button
-            android:id="@+id/btn_volume_down"
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/ringer_mode_group"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/action_volume_down_symbol"
-            android:contentDescription="@string/action_volume_down" />
+            android:layout_marginBottom="16dp"
+            app:selectionRequired="true"
+            app:singleSelection="true">
 
-        <SeekBar
-            android:id="@+id/volume_seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="8dp" />
+            <Button
+                android:id="@+id/btn_ringer_normal"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ringer_mode_normal" />
 
-        <Button
-            android:id="@+id/btn_volume_up"
-            android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/btn_ringer_vibrate"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ringer_mode_vibrate" />
+
+            <Button
+                android:id="@+id/btn_ringer_silent"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ringer_mode_silent" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <LinearLayout
+            android:id="@+id/dnd_access_banner"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/action_volume_up_symbol"
-            android:contentDescription="@string/action_volume_up" />
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/dnd_access_required"
+                android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+            <Button
+                android:id="@+id/btn_dnd_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dnd_access_open_settings" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/row_media"
+            layout="@layout/view_volume_row" />
+
+        <include
+            android:id="@+id/row_ring"
+            layout="@layout/view_volume_row" />
+
+        <include
+            android:id="@+id/row_notification"
+            layout="@layout/view_volume_row" />
+
+        <include
+            android:id="@+id/row_alarm"
+            layout="@layout/view_volume_row" />
+
+        <include
+            android:id="@+id/row_voice_call"
+            layout="@layout/view_volume_row" />
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
