@@ -32,3 +32,9 @@ jobs:
 
       - name: Assemble debug APK
         run: ./gradlew assembleDebug --no-daemon
+
+      - name: Report APK size
+        run: |
+          apk=$(find app/build/outputs/apk/debug -name "*.apk")
+          echo "### APK size" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`$(basename "$apk")\`: $(du -h "$apk" | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
