@@ -3,9 +3,15 @@ package dev.dopl.soundcontrol
 import android.content.Context
 import android.media.AudioManager
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.SeekBar
+import android.widget.Space
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import dev.dopl.soundcontrol.databinding.ActivityMainBinding
 import dev.dopl.soundcontrol.databinding.ViewVolumeRowBinding
 
@@ -14,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var volumeController: VolumeController
     private lateinit var volumeWatcher: VolumeWatcher
+    private lateinit var layoutPreferences: LayoutPreferences
     private var isSyncingRingerMode = false
     private val streamsBeingDragged = mutableSetOf<SoundStream>()
 
@@ -41,6 +48,13 @@ class MainActivity : AppCompatActivity() {
         val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         volumeController = VolumeController(SystemAudioManagerAdapter(audioManager))
         volumeWatcher = VolumeWatcher(this) { refreshAll() }
+        layoutPreferences = LayoutPreferences(this)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.rootContainer) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(top = bars.top, bottom = bars.bottom)
+            insets
+        }
 
         streamRows.forEach { (stream, row) -> bindRow(stream, row) }
 
@@ -53,7 +67,74 @@ class MainActivity : AppCompatActivity() {
         binding.btnDndSettings.setOnClickListener {
             startActivity(DndAccess.settingsIntent())
         }
+
+        setUpLayoutSettings()
+        applyVerticalPosition()
+        applyRowSpacing()
     }
+
+    private fun setUpLayoutSettings() {
+        binding.btnLayoutSettings.setOnClickListener {
+            binding.layoutSettingsPanel.visibility =
+                if (binding.layoutSettingsPanel.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
+
+        binding.seekPosition.progress = layoutPreferences.position
+        binding.seekPosition.setOnSeekBarChangeListener(seekBarListener { progress ->
+            layoutPreferences.position = progress
+            applyVerticalPosition()
+        })
+
+        binding.seekSpacing.progress = layoutPreferences.spacing
+        binding.seekSpacing.setOnSeekBarChangeListener(seekBarListener { progress ->
+            layoutPreferences.spacing = progress
+            applyRowSpacing()
+        })
+    }
+
+    private fun seekBarListener(onChanged: (Int) -> Unit) =
+        object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) onChanged(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
+            override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
+        }
+
+    private fun applyVerticalPosition() {
+        val bias = layoutPreferences.positionBias()
+        setSpaceWeight(binding.spaceTop, bias)
+        setSpaceWeight(binding.spaceBottom, 1f - bias)
+    }
+
+    private fun setSpaceWeight(space: Space, weight: Float) {
+        val params = space.layoutParams as LinearLayout.LayoutParams
+        params.weight = weight
+        space.layoutParams = params
+    }
+
+    private fun applyRowSpacing() {
+        val spacingPx = dpToPx(layoutPreferences.spacingDp())
+
+        val ringerParams = binding.ringerModeGroup.layoutParams as LinearLayout.LayoutParams
+        ringerParams.bottomMargin = spacingPx
+        binding.ringerModeGroup.layoutParams = ringerParams
+
+        val dndParams = binding.dndAccessBanner.layoutParams as LinearLayout.LayoutParams
+        dndParams.bottomMargin = spacingPx
+        binding.dndAccessBanner.layoutParams = dndParams
+
+        streamRows.values.forEach { row ->
+            row.root.setPadding(row.root.paddingLeft, spacingPx, row.root.paddingRight, spacingPx)
+        }
+    }
+
+    private fun dpToPx(dp: Int): Int = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dp.toFloat(),
+        resources.displayMetrics,
+    ).toInt()
 
     override fun onStart() {
         super.onStart()

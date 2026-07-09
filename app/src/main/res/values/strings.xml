@@ -16,4 +16,12 @@
     <string name="ringer_mode_silent">サイレント</string>
     <string name="dnd_access_required">サイレント切替には通知アクセスの許可が必要です</string>
     <string name="dnd_access_open_settings">許可設定を開く</string>
+    <string name="action_layout_settings">表示位置と行間隔の設定を開く</string>
+    <string name="action_layout_settings_symbol" translatable="false">⚙</string>
+    <string name="settings_position_label">表示位置</string>
+    <string name="settings_position_top">上</string>
+    <string name="settings_position_center">中央</string>
+    <string name="settings_spacing_label">行間隔</string>
+    <string name="settings_spacing_tight">詰める</string>
+    <string name="settings_spacing_wide">広げる</string>
 </resources>
