@@ -6,6 +6,7 @@
     <string name="stream_notification">通知</string>
     <string name="stream_alarm">アラーム</string>
     <string name="stream_voice_call">通話</string>
+    <string name="stream_system">システム</string>
     <string name="volume_value_format">%1$d / %2$d</string>
     <string name="action_volume_down">音量を下げる</string>
     <string name="action_volume_up">音量を上げる</string>
@@ -16,4 +17,11 @@
     <string name="ringer_mode_silent">サイレント</string>
     <string name="dnd_access_required">サイレント切替には通知アクセスの許可が必要です</string>
     <string name="dnd_access_open_settings">許可設定を開く</string>
+    <string name="settings_position_label">表示位置</string>
+    <string name="settings_position_top">上</string>
+    <string name="settings_position_center">中央</string>
+    <string name="settings_spacing_label">行間隔</string>
+    <string name="settings_spacing_tight">詰める</string>
+    <string name="settings_spacing_wide">広げる</string>
+    <string name="credit_format">%1$s v%2$s</string>
 </resources>
