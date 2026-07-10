@@ -1,7 +1,9 @@
 package dev.dopl.soundcontrol
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -26,11 +28,12 @@ class MainActivity : AppCompatActivity() {
 
     private val streamRows: Map<SoundStream, ViewVolumeRowBinding> by lazy {
         mapOf(
-            SoundStream.MEDIA to binding.rowMedia,
             SoundStream.RING to binding.rowRing,
             SoundStream.NOTIFICATION to binding.rowNotification,
+            SoundStream.MEDIA to binding.rowMedia,
             SoundStream.ALARM to binding.rowAlarm,
             SoundStream.VOICE_CALL to binding.rowVoiceCall,
+            SoundStream.SYSTEM to binding.rowSystem,
         )
     }
 
@@ -50,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         volumeWatcher = VolumeWatcher(this) { refreshAll() }
         layoutPreferences = LayoutPreferences(this)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.rootContainer) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.screenRoot) { view, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(top = bars.top, bottom = bars.bottom)
             insets
@@ -68,17 +71,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(DndAccess.settingsIntent())
         }
 
+        binding.creditText.text = getString(
+            R.string.credit_format,
+            getString(R.string.app_name),
+            appVersionName(),
+        )
+
         setUpLayoutSettings()
         applyVerticalPosition()
         applyRowSpacing()
     }
 
     private fun setUpLayoutSettings() {
-        binding.btnLayoutSettings.setOnClickListener {
-            binding.layoutSettingsPanel.visibility =
-                if (binding.layoutSettingsPanel.visibility == View.VISIBLE) View.GONE else View.VISIBLE
-        }
-
         binding.seekPosition.progress = layoutPreferences.position
         binding.seekPosition.setOnSeekBarChangeListener(seekBarListener { progress ->
             layoutPreferences.position = progress
@@ -135,6 +139,16 @@ class MainActivity : AppCompatActivity() {
         dp.toFloat(),
         resources.displayMetrics,
     ).toInt()
+
+    private fun appVersionName(): String {
+        val info = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.getPackageInfo(packageName, 0)
+        }
+        return info.versionName.orEmpty()
+    }
 
     override fun onStart() {
         super.onStart()
