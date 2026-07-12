@@ -171,8 +171,9 @@ class MainActivity : AppCompatActivity() {
         row.volumeSeekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (!fromUser) return
-                val min = volumeController.getVolumeState(stream).min
-                renderVolumeState(row, volumeController.setVolume(stream, progress + min))
+                val floor = volumeController.getVolumeState(stream).floor
+                renderVolumeState(row, volumeController.setVolume(stream, progress + floor))
+                refreshRingerModeSelection()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -185,10 +186,12 @@ class MainActivity : AppCompatActivity() {
         })
 
         row.btnVolumeDown.setOnClickListener {
-            renderVolumeState(row, volumeController.adjustVolume(stream, VolumeStep.LOWER))
+            volumeController.adjustVolume(stream, VolumeStep.LOWER)
+            refreshAll()
         }
         row.btnVolumeUp.setOnClickListener {
-            renderVolumeState(row, volumeController.adjustVolume(stream, VolumeStep.RAISE))
+            volumeController.adjustVolume(stream, VolumeStep.RAISE)
+            refreshAll()
         }
     }
 
@@ -231,8 +234,8 @@ class MainActivity : AppCompatActivity() {
         state: VolumeState,
         enabled: Boolean = !state.isFixed,
     ) {
-        row.volumeSeekbar.max = state.max - state.min
-        row.volumeSeekbar.progress = state.current - state.min
+        row.volumeSeekbar.max = state.max - state.floor
+        row.volumeSeekbar.progress = (state.current - state.floor).coerceAtLeast(0)
         row.volumeSeekbar.isEnabled = enabled
         row.btnVolumeDown.isEnabled = enabled
         row.btnVolumeUp.isEnabled = enabled
